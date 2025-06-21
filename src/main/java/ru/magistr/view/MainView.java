@@ -64,7 +64,7 @@ public class MainView extends AppLayout {
 //                new SideNavItem("Dashboard", "/dashboard",
 //                        VaadinIcon.DASHBOARD.create()),
 //                new SideNavItem("Orders", "/orders", VaadinIcon.CART.create()),
-                new SideNavItem("Мои студенты", "/customers",
+                new SideNavItem("Мои студенты", "/group-grid",
                         VaadinIcon.USER_HEART.create()),
                 new SideNavItem("Создание контрольных", "/generate",
                         VaadinIcon.PACKAGE.create()),
