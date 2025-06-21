@@ -56,6 +56,14 @@ public class GroupGridView extends VerticalLayout {
         grid.addColumn(GroupDTO::getStudentCount).setHeader("Количество студентов");
         grid.setWidthFull();
 
+        // Обработчик двойного клика
+        grid.addItemDoubleClickListener(event -> {
+            GroupDTO group = event.getItem();
+            openStudentGrid(group);
+        });
+    }
+    private void openStudentGrid(GroupDTO group) {
+        UI.getCurrent().navigate("students/" + group.getGroupNumber());
     }
 
     private void configureOverlay() {
