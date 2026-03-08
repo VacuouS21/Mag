@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
-import ru.magistr.views.LoginView;
+import ru.magistr.views.login.LoginView;
 
 @Configuration
 @EnableWebSecurity

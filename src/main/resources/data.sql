@@ -1,0 +1,225 @@
+-- -- Инициализация базы данных для системы контроля знаний
+--
+-- -- ==========================================
+-- -- ТАБЛИЦА: USERS (Пользователи)
+-- -- ==========================================
+-- INSERT INTO users(username, email, first_name, last_name, middle_name, password, role, active, created_at) VALUES
+-- -- Администраторы
+-- ('admin', 'admin@magistr.ru', 'Администратор', 'Системный', 'Системович', '$2a$10$slYQmyNdGzin7olVN3p5Be7DlH.PKZbv5H8KnzzVgXXbVxzy3Bo.a', 'ADMIN', true, CURRENT_TIMESTAMP),
+--
+-- -- Учителя
+-- ('teacher_ivanov', 'ivanov@magistr.ru', 'Иван', 'Иванов', 'Иванович', '$2a$10$slYQmyNdGzin7olVN3p5Be7DlH.PKZbv5H8KnzzVgXXbVxzy3Bo.a', 'TEACHER', true, CURRENT_TIMESTAMP),
+-- ('teacher_petrov', 'petrov@magistr.ru', 'Петр', 'Петров', 'Петрович', '$2a$10$slYQmyNdGzin7olVN3p5Be7DlH.PKZbv5H8KnzzVgXXbVxzy3Bo.a', 'TEACHER', true, CURRENT_TIMESTAMP),
+-- ('teacher_smirnov', 'smirnov@magistr.ru', 'Сергей', 'Смирнов', 'Сергеевич', '$2a$10$slYQmyNdGzin7olVN3p5Be7DlH.PKZbv5H8KnzzVgXXbVxzy3Bo.a', 'TEACHER', true, CURRENT_TIMESTAMP),
+--
+-- -- Студенты
+-- ('student_sokolov', 'sokolov@magistr.ru', 'Алексей', 'Соколов', 'Александрович', '$2a$10$slYQmyNdGzin7olVN3p5Be7DlH.PKZbv5H8KnzzVgXXbVxzy3Bo.a', 'STUDENT', true, CURRENT_TIMESTAMP),
+-- ('student_anna', 'anna@magistr.ru', 'Анна', 'Смирнова', 'Сергеевна', '$2a$10$slYQmyNdGzin7olVN3p5Be7DlH.PKZbv5H8KnzzVgXXbVxzy3Bo.a', 'STUDENT', true, CURRENT_TIMESTAMP),
+-- ('student_maria', 'maria@magistr.ru', 'Мария', 'Иванова', 'Ивановна', '$2a$10$slYQmyNdGzin7olVN3p5Be7DlH.PKZbv5H8KnzzVgXXbVxzy3Bo.a', 'STUDENT', true, CURRENT_TIMESTAMP),
+-- ('student_elena', 'elena@magistr.ru', 'Елена', 'Петрова', 'Петровна', '$2a$10$slYQmyNdGzin7olVN3p5Be7DlH.PKZbv5H8KnzzVgXXbVxzy3Bo.a', 'STUDENT', true, CURRENT_TIMESTAMP),
+-- ('student_oleg', 'oleg@magistr.ru', 'Олег', 'Козлов', 'Олегович', '$2a$10$slYQmyNdGzin7olVN3p5Be7DlH.PKZbv5H8KnzzVgXXbVxzy3Bo.a', 'STUDENT', true, CURRENT_TIMESTAMP),
+-- ('student_dmitri', 'dmitri@magistr.ru', 'Дмитрий', 'Волков', 'Дмитриевич', '$2a$10$slYQmyNdGzin7olVN3p5Be7DlH.PKZbv5H8KnzzVgXXbVxzy3Bo.a', 'STUDENT', true, CURRENT_TIMESTAMP);
+--
+-- -- ==========================================
+-- -- ТАБЛИЦА: GROUPS (Группы студентов)
+-- -- ==========================================
+-- INSERT INTO groups(name, year, specialty) VALUES
+--                                               ('БИ-21-1', 2021, 'Бизнес-информатика'),
+--                                               ('БИ-21-2', 2021, 'Бизнес-информатика'),
+--                                               ('БИ-22-1', 2022, 'Бизнес-информатика'),
+--                                               ('ПИ-21-1', 2021, 'Прикладная информатика'),
+--                                               ('ПИ-22-1', 2022, 'Прикладная информатика');
+--
+-- -- ==========================================
+-- -- ТАБЛИЦА: STUDENT (Студенты - связь с группами)
+-- -- ==========================================
+-- INSERT INTO student(user_id, group_id, record_book_number) VALUES
+--                                                                (5, 1, '000001'),  -- Алексей Соколов - БИ-21-1
+--                                                                (6, 1, '000002'),  -- Анна Смирнова - БИ-21-1
+--                                                                (7, 2, '000003'),  -- Мария Иванова - БИ-21-2
+--                                                                (8, 2, '000004'),  -- Елена Петрова - БИ-21-2
+--                                                                (9, 3, '000005'),  -- Олег Козлов - БИ-22-1
+--                                                                (10, 3, '000006'); -- Дмитрий Волков - БИ-22-1
+--
+-- -- ==========================================
+-- -- ТАБЛИЦА: TEACHER (Учителя)
+-- -- ==========================================
+-- INSERT INTO teacher(user_id, department, qualification) VALUES
+--                                                             (2, 'Кафедра Информатики', 'Кандидат технических наук'),
+--                                                             (3, 'Кафедра Информатики', 'Доктор физико-математических наук'),
+--                                                             (4, 'Кафедра Информатики', 'Кандидат технических наук');
+--
+-- -- ==========================================
+-- -- ТАБЛИЦА: SUBJECT (Предметы)
+-- -- ==========================================
+-- INSERT INTO subject(name, description, teacher_id) VALUES
+--                                                        ('Базы данных', 'Изучение основ и проектирования реляционных баз данных', 2),
+--                                                        ('Веб-технологии', 'Разработка веб-приложений с использованием современных технологий', 3),
+--                                                        ('Алгоритмы и структуры данных', 'Изучение основных алгоритмов и структур данных', 4),
+--                                                        ('Операционные системы', 'Архитектура и принципы работы операционных систем', 2),
+--                                                        ('Объектно-ориентированное программирование', 'Основы и паттерны проектирования на основе ООП', 3);
+--
+-- -- ==========================================
+-- -- ТАБЛИЦА: TEST (Контрольные работы/Тесты)
+-- -- ==========================================
+-- INSERT INTO test(title, description, subject_id, teacher_id, question_count, time_limit_minutes, created_at, is_published) VALUES
+--                                                                                                                                ('Контрольная работа № 1 - Базы данных', 'Тестирование знаний по основам реляционных БД', 1, 2, 20, 60, CURRENT_TIMESTAMP, true),
+--                                                                                                                                ('Контрольная работа № 2 - Веб-технологии', 'Проверка знаний по HTML, CSS, JavaScript', 2, 3, 25, 90, CURRENT_TIMESTAMP, true),
+--                                                                                                                                ('Контрольная работа № 1 - Алгоритмы', 'Задачи на оптимизацию и анализ алгоритмов', 3, 4, 15, 45, CURRENT_TIMESTAMP, true),
+--                                                                                                                                ('Контрольная работа № 2 - ОС', 'Тестирование понимания процессов и управления памятью', 4, 2, 18, 60, CURRENT_TIMESTAMP, true),
+--                                                                                                                                ('Контрольная работа № 1 - ООП', 'Проверка навыков использования паттернов проектирования', 5, 3, 22, 75, CURRENT_TIMESTAMP, true);
+--
+-- -- ==========================================
+-- -- ТАБЛИЦА: QUESTION (Вопросы)
+-- -- ==========================================
+-- INSERT INTO question(test_id, question_text, question_type, difficulty_level, order_number) VALUES
+-- -- КР № 1 - Базы данных
+-- (1, 'Что такое нормализация в контексте реляционных баз данных?', 'MULTIPLE_CHOICE', 'EASY', 1),
+-- (1, 'Какие типы связей существуют в реляционных БД?', 'MULTIPLE_CHOICE', 'MEDIUM', 2),
+-- (1, 'Объясните разницу между INNER JOIN и LEFT JOIN', 'ESSAY', 'HARD', 3),
+-- (1, 'Напишите SQL запрос для получения всех студентов из группы БИ-21-1', 'CODE', 'MEDIUM', 4),
+-- (1, 'Что такое первичный ключ (Primary Key)?', 'MULTIPLE_CHOICE', 'EASY', 5),
+--
+-- -- КР № 2 - Веб-технологии
+-- (2, 'Какие основные компоненты HTML страницы?', 'MULTIPLE_CHOICE', 'EASY', 1),
+-- (2, 'Объясните различие между CSS и JavaScript', 'ESSAY', 'MEDIUM', 2),
+-- (2, 'Напишите функцию JavaScript для валидации email', 'CODE', 'MEDIUM', 3),
+-- (2, 'Что такое DOM (Document Object Model)?', 'MULTIPLE_CHOICE', 'MEDIUM', 4),
+-- (2, 'Как работают асинхронные запросы (AJAX)?', 'ESSAY', 'HARD', 5),
+--
+-- -- КР № 1 - Алгоритмы
+-- (3, 'Какова временная сложность алгоритма быстрой сортировки?', 'MULTIPLE_CHOICE', 'MEDIUM', 1),
+-- (3, 'Объясните принцип "разделяй и властвуй"', 'ESSAY', 'MEDIUM', 2),
+-- (3, 'Напишите функцию для поиска в глубину (DFS)', 'CODE', 'HARD', 3),
+-- (3, 'Что такое динамическое программирование?', 'MULTIPLE_CHOICE', 'HARD', 4),
+-- (3, 'Какова сложность поиска в двоичном дереве поиска?', 'MULTIPLE_CHOICE', 'MEDIUM', 5),
+--
+-- -- КР № 2 - ОС
+-- (4, 'Что такое процесс в операционной системе?', 'MULTIPLE_CHOICE', 'EASY', 1),
+-- (4, 'Объясните различие между процессом и потоком', 'ESSAY', 'MEDIUM', 2),
+-- (4, 'Какие методы планирования процессов вы знаете?', 'MULTIPLE_CHOICE', 'MEDIUM', 3),
+-- (4, 'Что такое дедлок (deadlock)?', 'ESSAY', 'HARD', 4),
+-- (4, 'Напишите псевдокод для решения проблемы обедающих философов', 'CODE', 'HARD', 5),
+--
+-- -- КР № 1 - ООП
+-- (5, 'Назовите четыре основных принципа ООП', 'MULTIPLE_CHOICE', 'EASY', 1),
+-- (5, 'Объясните концепцию наследования', 'ESSAY', 'MEDIUM', 2),
+-- (5, 'Напишите класс на Java с конструктором и методами', 'CODE', 'MEDIUM', 3),
+-- (5, 'Что такое полиморфизм?', 'MULTIPLE_CHOICE', 'MEDIUM', 4),
+-- (5, 'Объясните паттерн проектирования "Singleton"', 'ESSAY', 'HARD', 5);
+--
+-- -- ==========================================
+-- -- ТАБЛИЦА: ANSWER_OPTION (Варианты ответов)
+-- -- ==========================================
+-- INSERT INTO answer_option(question_id, option_text, is_correct, order_number) VALUES
+-- -- Вопрос 1 - Нормализация
+-- (1, 'Процесс организации данных в таблицы для уменьшения избыточности', true, 1),
+-- (1, 'Процесс удаления всех данных из БД', false, 2),
+-- (1, 'Процесс создания новой базы данных', false, 3),
+-- (1, 'Процесс резервного копирования', false, 4),
+--
+-- -- Вопрос 2 - Типы связей
+-- (2, 'One-to-One, One-to-Many, Many-to-Many', true, 1),
+-- (2, 'Primary и Secondary', false, 2),
+-- (2, 'Internal и External', false, 3),
+-- (2, 'Simple и Complex', false, 4),
+--
+-- -- Вопрос 5 - Первичный ключ
+-- (5, 'Поле или набор полей, однозначно идентифицирующих запись', true, 1),
+-- (5, 'Поле для сортировки данных', false, 2),
+-- (5, 'Поле для индексирования', false, 3),
+-- (5, 'Поле для связи с другой таблицей', false, 4),
+--
+-- -- Вопрос 6 - HTML компоненты
+-- (6, 'html, head, body, meta, title', true, 1),
+-- (6, 'div, span, p, h1, h2', false, 2),
+-- (6, 'script, style, link, meta', false, 3),
+-- (6, 'header, nav, main, footer', false, 4),
+--
+-- -- Вопрос 8 - DOM
+-- (8, 'Объектная модель для взаимодействия с HTML страницей', true, 1),
+-- (8, 'Метод обработки данных', false, 2),
+-- (8, 'Тип базы данных', false, 3),
+-- (8, 'Язык программирования', false, 4),
+--
+-- -- Вопрос 11 - Временная сложность быстрой сортировки
+-- (11, 'O(n log n) в среднем, O(n²) в худшем случае', true, 1),
+-- (11, 'O(n) всегда', false, 2),
+-- (11, 'O(n²) всегда', false, 3),
+-- (11, 'O(log n)', false, 4),
+--
+-- -- Вопрос 13 - Динамическое программирование
+-- (13, 'Метод разбиения задачи на подзадачи с сохранением результатов', true, 1),
+-- (13, 'Метод случайного выбора решения', false, 2),
+-- (13, 'Метод перебора всех вариантов', false, 3),
+-- (13, 'Метод параллельных вычислений', false, 4),
+--
+-- -- Вопрос 15 - Процесс в ОС
+-- (15, 'Экземпляр программы, выполняемый в памяти', true, 1),
+-- (15, 'Файл на диске', false, 2),
+-- (15, 'Функция в программе', false, 3),
+-- (15, 'Переменная в памяти', false, 4),
+--
+-- -- Вопрос 17 - Методы планирования
+-- (17, 'FIFO, Round-Robin, Priority, SJF', true, 1),
+-- (17, 'LIFO, FIFO, RANDOM', false, 2),
+-- (17, 'Start-Stop, Pause-Resume', false, 3),
+-- (17, 'Read-Write, Load-Save', false, 4),
+--
+-- -- Вопрос 20 - Принципы ООП
+-- (20, 'Инкапсуляция, Наследование, Полиморфизм, Абстракция', true, 1),
+-- (20, 'Класс, Объект, Метод, Свойство', false, 2),
+-- (20, 'Статическая, Динамическая, Компилятор, Интерпретатор', false, 3),
+-- (20, 'Синтаксис, Семантика, Логика, Алгоритм', false, 4),
+--
+-- -- Вопрос 22 - Полиморфизм
+-- (22, 'Способность объектов разных типов отвечать на одно сообщение', true, 1),
+-- (22, 'Способность скрывать данные', false, 2),
+-- (22, 'Способность создавать новые объекты', false, 3),
+-- (22, 'Способность удалять объекты', false, 4);
+--
+-- -- ==========================================
+-- -- ТАБЛИЦА: TEST_RESULT (Результаты тестирования)
+-- -- ==========================================
+-- INSERT INTO test_result(student_id, test_id, start_time, end_time, score, max_score, status, time_spent_minutes) VALUES
+-- -- Студент 1 - Алексей Соколов
+-- (1, 1, CURRENT_TIMESTAMP - INTERVAL '2 day', CURRENT_TIMESTAMP - INTERVAL '2 day' + INTERVAL '45 minute', 16, 20, 'COMPLETED', 45),
+-- (1, 2, CURRENT_TIMESTAMP - INTERVAL '5 day', CURRENT_TIMESTAMP - INTERVAL '5 day' + INTERVAL '75 minute', 18, 25, 'COMPLETED', 75),
+--
+-- -- Студент 2 - Анна Смирнова
+-- (2, 1, CURRENT_TIMESTAMP - INTERVAL '3 day', CURRENT_TIMESTAMP - INTERVAL '3 day' + INTERVAL '55 minute', 19, 20, 'COMPLETED', 55),
+-- (2, 2, CURRENT_TIMESTAMP - INTERVAL '6 day', CURRENT_TIMESTAMP - INTERVAL '6 day' + INTERVAL '80 minute', 22, 25, 'COMPLETED', 80),
+--
+-- -- Студент 3 - Мария Иванова
+-- (3, 1, CURRENT_TIMESTAMP - INTERVAL '1 day', CURRENT_TIMESTAMP - INTERVAL '1 day' + INTERVAL '50 minute', 14, 20, 'COMPLETED', 50),
+-- (3, 3, CURRENT_TIMESTAMP - INTERVAL '4 day', CURRENT_TIMESTAMP - INTERVAL '4 day' + INTERVAL '40 minute', 11, 15, 'COMPLETED', 40),
+--
+-- -- Студент 4 - Елена Петрова
+-- (4, 2, CURRENT_TIMESTAMP - INTERVAL '7 day', CURRENT_TIMESTAMP - INTERVAL '7 day' + INTERVAL '85 minute', 20, 25, 'COMPLETED', 85),
+-- (4, 4, CURRENT_TIMESTAMP - INTERVAL '2 day', CURRENT_TIMESTAMP - INTERVAL '2 day' + INTERVAL '55 minute', 15, 18, 'COMPLETED', 55),
+--
+-- -- Студент 5 - Олег Козлов
+-- (5, 1, CURRENT_TIMESTAMP - INTERVAL '8 day', CURRENT_TIMESTAMP - INTERVAL '8 day' + INTERVAL '48 minute', 13, 20, 'COMPLETED', 48),
+-- (5, 3, CURRENT_TIMESTAMP - INTERVAL '3 day', CURRENT_TIMESTAMP - INTERVAL '3 day' + INTERVAL '38 minute', 9, 15, 'COMPLETED', 38),
+--
+-- -- Студент 6 - Дмитрий Волков
+-- (6, 4, CURRENT_TIMESTAMP - INTERVAL '5 day', CURRENT_TIMESTAMP - INTERVAL '5 day' + INTERVAL '58 minute', 16, 18, 'COMPLETED', 58),
+-- (6, 5, CURRENT_TIMESTAMP - INTERVAL '1 day', CURRENT_TIMESTAMP - INTERVAL '1 day' + INTERVAL '68 minute', 18, 22, 'COMPLETED', 68);
+--
+-- -- ==========================================
+-- -- ТАБЛИЦА: STUDENT_ANSWER (Ответы студентов)
+-- -- ==========================================
+-- INSERT INTO student_answer(test_result_id, question_id, answer_text, selected_option_id, is_correct, points_earned) VALUES
+-- -- Результат 1 (Алексей - КР1)
+-- (1, 1, NULL, 1, true, 1),
+-- (1, 2, NULL, 1, true, 1),
+-- (1, 3, 'Нормализация это процесс организации данных', NULL, true, 0.8),
+-- (1, 4, 'SELECT * FROM student WHERE group_id = 1', NULL, true, 0.9),
+-- (1, 5, NULL, 1, true, 1),
+--
+-- -- Результат 2 (Алексей - КР2)
+-- (2, 6, NULL, 1, true, 1),
+-- (2, 7, 'CSS отвечает за стили, JavaScript за логику', NULL, true, 0.85),
+-- (2, 8, 'function validateEmail(email) {...}', NULL, true, 0.95),
+-- (2, 9, NULL, 1, true, 1),
+-- (2, 10, 'AJAX позволяет отправлять асинхронные запросы', NULL, true, 0.8);

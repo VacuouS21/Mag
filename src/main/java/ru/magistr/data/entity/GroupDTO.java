@@ -1,5 +1,6 @@
 package ru.magistr.data.entity;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
