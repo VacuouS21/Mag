@@ -1,6 +1,6 @@
-package ru.magistr.view.services;
+package ru.magistr.views.services;
 
-import ru.magistr.view.WorksListView.ControlWork;
+import ru.magistr.views.WorksListView.ControlWork;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

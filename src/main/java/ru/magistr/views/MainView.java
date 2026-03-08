@@ -1,4 +1,4 @@
-package ru.magistr.view;
+package ru.magistr.views;
 
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
