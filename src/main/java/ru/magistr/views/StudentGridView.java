@@ -1,4 +1,4 @@
-package ru.magistr.view;
+package ru.magistr.views;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -13,7 +13,7 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.security.PermitAll;
-import ru.magistr.entity.StudentDTO;
+import ru.magistr.data.entity.StudentDTO;
 
 import java.util.Arrays;
 import java.util.List;

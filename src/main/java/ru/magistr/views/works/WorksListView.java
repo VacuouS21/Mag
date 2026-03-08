@@ -1,4 +1,4 @@
-package ru.magistr.view;
+package ru.magistr.views.works;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
@@ -13,9 +13,13 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.security.PermitAll;
-import ru.magistr.view.services.ControlWorkService;
+import ru.magistr.data.entity.ControlWorkDTO;
+import ru.magistr.service.ControlWorkService;
+import ru.magistr.views.ControlWorkQuestionsDialog;
+import ru.magistr.views.MainView;
 
 import java.util.List;
+import java.util.Set;
 
 @Route(value = "documents", layout = MainView.class)
 @SpringComponent
@@ -23,13 +27,13 @@ import java.util.List;
 @PermitAll
 public class WorksListView extends VerticalLayout {
 
-    private Grid<ControlWork> grid;
-    private final ControlWorkService controlWorkService;
+    private Grid<ControlWorkDTO> grid;
+    private final ControlWorkService ControlWorkService;
     private Button actionsButton;
     private Button createWorkButton;
 
-    public WorksListView(ControlWorkService controlWorkService) {
-        this.controlWorkService = controlWorkService;
+    public WorksListView(ControlWorkService ControlWorkDTOService) {
+        this.ControlWorkService = ControlWorkDTOService;
 
         initComponents();
         addComponents();
@@ -58,27 +62,27 @@ public class WorksListView extends VerticalLayout {
         grid = new Grid<>();
 
         // Добавляем колонки вручную
-        Grid.Column<ControlWork> nameColumn = grid.addColumn(ControlWork::getName)
+        Grid.Column<ControlWorkDTO> nameColumn = grid.addColumn(ControlWorkDTO::getName)
                 .setHeader("Наименование")
                 .setAutoWidth(true)
                 .setResizable(true);
 
-        Grid.Column<ControlWork> idColumn = grid.addColumn(ControlWork::getUniqueId)
+        Grid.Column<ControlWorkDTO> idColumn = grid.addColumn(ControlWorkDTO::getUniqueId)
                 .setHeader("Уникальный номер")
                 .setAutoWidth(true)
                 .setResizable(true);
 
-        Grid.Column<ControlWork> questionsColumn = grid.addColumn(ControlWork::getQuestionsCount)
+        Grid.Column<ControlWorkDTO> questionsColumn = grid.addColumn(ControlWorkDTO::getQuestionsCount)
                 .setHeader("Количество вопросов")
                 .setAutoWidth(true)
                 .setResizable(true);
 
         // Устанавливаем данные из сервиса
-        grid.setItems(controlWorkService.getControlWorks());
+        grid.setItems(ControlWorkService.getControlWorks());
 
         // Обработка двойного клика
         grid.addItemDoubleClickListener(event -> {
-            ControlWork work = event.getItem();
+            ControlWorkDTO work = event.getItem();
             openWorkDetails(work);
         });
 
@@ -96,10 +100,28 @@ public class WorksListView extends VerticalLayout {
         contextMenu.addItem("Назначить студенту", e -> assignToStudent());
         contextMenu.addItem("Удалить работу", e -> deleteWork());
         contextMenu.addItem("Статистика", e -> showStatistics());
+        contextMenu.addItem("Просмотр вопросов", e -> {
+// Получаем список выделенных строк в гриде
+            Set<ControlWorkDTO> selectedItems = grid.getSelectedItems();
+
+            // Проверяем, выбрал ли пользователь хоть что-то
+            if (selectedItems.isEmpty()) {
+                Notification.show("Пожалуйста, выделите контрольную работу галочкой",
+                        3000, Notification.Position.MIDDLE);
+                return;
+            }
+
+            // Берем первую выделенную работу (если выделено несколько)
+            ControlWorkDTO selectedWork = selectedItems.iterator().next();
+
+            // Открываем наш диалог
+            ControlWorkQuestionsDialog dialog = new ControlWorkQuestionsDialog(selectedWork.getUniqueId());
+            dialog.open();
+        });
     }
 
     private void assignToStudent() {
-        List<ControlWork> selected = grid.getSelectedItems().stream().toList();
+        List<ControlWorkDTO> selected = grid.getSelectedItems().stream().toList();
         if (selected.isEmpty()) {
             Notification.show("Выберите работу для назначения");
             return;
@@ -108,18 +130,18 @@ public class WorksListView extends VerticalLayout {
     }
 
     private void deleteWork() {
-        List<ControlWork> selected = grid.getSelectedItems().stream().toList();
+        List<ControlWorkDTO> selected = grid.getSelectedItems().stream().toList();
         if (selected.isEmpty()) {
             Notification.show("Выберите работу для удаления");
             return;
         }
-        selected.forEach(controlWorkService::removeControlWork);
+        selected.forEach(ControlWorkService::removeControlWork);
         grid.getDataProvider().refreshAll();
         Notification.show("Удалено работ: " + selected.size());
     }
 
     private void showStatistics() {
-        List<ControlWork> selected = grid.getSelectedItems().stream().toList();
+        List<ControlWorkDTO> selected = grid.getSelectedItems().stream().toList();
         if (selected.isEmpty()) {
             Notification.show("Выберите работу для просмотра статистики");
             return;
@@ -127,7 +149,7 @@ public class WorksListView extends VerticalLayout {
         Notification.show("Статистика по работе '" + selected.get(0).getName() + "'");
     }
 
-    private void openWorkDetails(ControlWork work) {
+    private void openWorkDetails(ControlWorkDTO work) {
         Notification.show("Открытие деталей работы: " + work.getName());
         // Здесь логика открытия вкладки с вопросами
         // getUI().ifPresent(ui -> ui.navigate("work-details/" + work.getUniqueId()));
@@ -167,28 +189,5 @@ public class WorksListView extends VerticalLayout {
         setFlexGrow(1, gridContainer); // Грид занимает все доступное пространство
     }
 
-    // Внутренний класс для представления контрольной работы
-    public static class ControlWork {
-        private String name;
-        private String uniqueId;
-        private int questionsCount;
 
-        public ControlWork(String name, String uniqueId, int questionsCount) {
-            this.name = name;
-            this.uniqueId = uniqueId;
-            this.questionsCount = questionsCount;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getUniqueId() {
-            return uniqueId;
-        }
-
-        public int getQuestionsCount() {
-            return questionsCount;
-        }
-    }
 }
