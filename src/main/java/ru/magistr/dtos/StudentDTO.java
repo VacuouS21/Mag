@@ -1,4 +1,4 @@
-package ru.magistr.entity;
+package ru.magistr.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

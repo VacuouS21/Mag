@@ -1,4 +1,4 @@
-package ru.magistr.view;
+package ru.magistr.views;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
@@ -13,7 +13,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.security.PermitAll;
-import ru.magistr.view.services.ControlWorkService;
+import ru.magistr.views.services.ControlWorkService;
 
 import java.util.List;
 
