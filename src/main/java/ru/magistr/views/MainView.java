@@ -1,5 +1,6 @@
 package ru.magistr.views;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -22,11 +23,11 @@ public class MainView extends AppLayout {
     public MainView() {
         DrawerToggle toggle = new DrawerToggle();
 
-        H1 title = new H1("MyApp");
+        H1 title = new H1("Проверочные работы");
         title.getStyle().set("font-size", "var(--lumo-font-size-l)")
                 .set("margin", "0");
 
-        Avatar avatar = new Avatar("");
+        Avatar avatar = new Avatar("Пользователь");
         avatar.getStyle()
                 .set("cursor", "pointer")
                 .set("margin-right", "var(--lumo-space-m)");
@@ -61,18 +62,17 @@ public class MainView extends AppLayout {
     private SideNav getSideNav() {
         SideNav sideNav = new SideNav();
         sideNav.addItem(
-//                new SideNavItem("Dashboard", "/dashboard",
-//                        VaadinIcon.DASHBOARD.create()),
-//                new SideNavItem("Orders", "/orders", VaadinIcon.CART.create()),
                 new SideNavItem("Мои студенты", "/group-grid",
                         VaadinIcon.USER_HEART.create()),
                 new SideNavItem("Создание контрольных", "/generate",
                         VaadinIcon.PACKAGE.create()),
                 new SideNavItem("Созданные работы", "/documents",
                         VaadinIcon.RECORDS.create()),
-                new SideNavItem("Изменение работ", "/tasks", VaadinIcon.LIST.create()),
-                new SideNavItem("Результаты", "/analytics",
-                        VaadinIcon.CHART.create()));
+                new SideNavItem("Назначенные работы", "/tasks", VaadinIcon.LIST.create()),
+                new SideNavItem("Мои чаты", "/chats",
+                        VaadinIcon.CHART.create()),
+                new SideNavItem("Результаты", "/analitycs",
+                        VaadinIcon.CHAT.create()));
         return sideNav;
     }
 
@@ -88,6 +88,6 @@ public class MainView extends AppLayout {
 
     private void logout() {
         // Логика выхода
-        getUI().ifPresent(ui -> ui.navigate("logout"));
+        getUI().ifPresent(ui -> ui.navigate("login"));
     }
 }

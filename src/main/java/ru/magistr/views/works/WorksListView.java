@@ -1,8 +1,10 @@
 package ru.magistr.views.works;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -13,10 +15,12 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import jakarta.annotation.security.PermitAll;
+import org.springframework.beans.factory.ObjectProvider;
 import ru.magistr.data.entity.ControlWorkDTO;
 import ru.magistr.service.ControlWorkService;
 import ru.magistr.views.ControlWorkQuestionsDialog;
 import ru.magistr.views.MainView;
+import ru.magistr.views.WorkResultsView;
 
 import java.util.List;
 import java.util.Set;
@@ -28,12 +32,19 @@ import java.util.Set;
 public class WorksListView extends VerticalLayout {
 
     private Grid<ControlWorkDTO> grid;
-    private final ControlWorkService ControlWorkService;
+    private final ControlWorkService controlWorkService;
+
+    // Фабрика для получения свежих экземпляров диалога (Prototype)
+    private final ObjectProvider<ControlWorkQuestionsDialog> dialogProvider;
+
     private Button actionsButton;
     private Button createWorkButton;
 
-    public WorksListView(ControlWorkService ControlWorkDTOService) {
-        this.ControlWorkService = ControlWorkDTOService;
+    // Внедряем ObjectProvider через конструктор
+    public WorksListView(ControlWorkService controlWorkService,
+                         ObjectProvider<ControlWorkQuestionsDialog> dialogProvider) {
+        this.controlWorkService = controlWorkService;
+        this.dialogProvider = dialogProvider;
 
         initComponents();
         addComponents();
@@ -51,6 +62,7 @@ public class WorksListView extends VerticalLayout {
 
         // Кнопка создания новой контрольной работы
         createWorkButton = new Button("Создать контрольную работу", new Icon(VaadinIcon.PLUS));
+        createWorkButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         createWorkButton.addClickListener(event -> {
             // Переход на страницу генерации
             getUI().ifPresent(ui -> ui.navigate("generate"));
@@ -78,13 +90,25 @@ public class WorksListView extends VerticalLayout {
                 .setResizable(true);
 
         // Устанавливаем данные из сервиса
-        grid.setItems(ControlWorkService.getControlWorks());
+        grid.setItems(controlWorkService.getControlWorks());
 
         // Обработка двойного клика
         grid.addItemDoubleClickListener(event -> {
             ControlWorkDTO work = event.getItem();
             openWorkDetails(work);
         });
+
+        // Применяем встроенные стили Lumo
+        grid.addThemeVariants(
+                GridVariant.LUMO_ROW_STRIPES,       // Эффект "зебры" для удобного чтения строк
+                GridVariant.LUMO_COLUMN_BORDERS,    // Разделители между колонками
+                GridVariant.LUMO_WRAP_CELL_CONTENT  // Перенос длинного текста (чтобы он не обрезался многоточием)
+        );
+
+// Добавляем легкую тень и скругленные углы для более современного "карточного" вида
+        grid.getStyle().set("box-shadow", "var(--lumo-box-shadow-s)");
+        grid.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
+        grid.getStyle().set("overflow", "hidden"); // Чтобы углы не "срезались" содержимым
 
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setSizeFull();
@@ -96,28 +120,45 @@ public class WorksListView extends VerticalLayout {
         ContextMenu contextMenu = new ContextMenu();
         contextMenu.setTarget(actionsButton);
         contextMenu.setOpenOnClick(true);
-
-        contextMenu.addItem("Назначить студенту", e -> assignToStudent());
+        contextMenu.addItem("Назначить студенту/группе", e -> assignToStudent());
         contextMenu.addItem("Удалить работу", e -> deleteWork());
-        contextMenu.addItem("Статистика", e -> showStatistics());
-        contextMenu.addItem("Просмотр вопросов", e -> {
-// Получаем список выделенных строк в гриде
-            Set<ControlWorkDTO> selectedItems = grid.getSelectedItems();
+//        contextMenu.addItem("Статистика", e -> showStatistics());
+        contextMenu.addItem("Редактировать работу", e -> {editControlWork();});
+        contextMenu.addItem("Просмотреть результаты", e -> viewResults());
+    }
+    private void editControlWork(){
+        Set<ControlWorkDTO> selectedItems = grid.getSelectedItems();
+        if (selectedItems.isEmpty()) {
+            Notification.show("Пожалуйста, выделите контрольную работу галочкой", 3000, Notification.Position.MIDDLE);
+            return;
+        }
 
-            // Проверяем, выбрал ли пользователь хоть что-то
-            if (selectedItems.isEmpty()) {
-                Notification.show("Пожалуйста, выделите контрольную работу галочкой",
-                        3000, Notification.Position.MIDDLE);
-                return;
-            }
+        ControlWorkDTO selectedWork = selectedItems.iterator().next();
 
-            // Берем первую выделенную работу (если выделено несколько)
-            ControlWorkDTO selectedWork = selectedItems.iterator().next();
+        // Просим у Spring НОВЫЙ экземпляр диалога со всеми внедренными сервисами
+        ControlWorkQuestionsDialog dialog = dialogProvider.getObject();
+        // Передаем данные и открываем
+        dialog.openDialog(selectedWork.getUniqueId(), false);
+    }
 
-            // Открываем наш диалог
-            ControlWorkQuestionsDialog dialog = new ControlWorkQuestionsDialog(selectedWork.getUniqueId());
-            dialog.open();
-        });
+    private void openWorkDetails(ControlWorkDTO work) {
+        // Просим у Spring НОВЫЙ экземпляр диалога
+        ControlWorkQuestionsDialog dialog = dialogProvider.getObject();
+        // Передаем данные и открываем в режиме просмотра
+        dialog.openDialog(work.getUniqueId(), true);
+    }
+
+    // Добавьте сам метод перехода:
+    private void viewResults() {
+        Set<ControlWorkDTO> selectedItems = grid.getSelectedItems();
+        if (selectedItems.isEmpty()) {
+            Notification.show("Выберите контрольную работу для просмотра результатов", 3000, Notification.Position.MIDDLE);
+            return;
+        }
+
+        ControlWorkDTO selectedWork = selectedItems.iterator().next();
+        // Переходим на новый роут, передавая ID работы как параметр
+        getUI().ifPresent(ui -> ui.navigate(WorkResultsView.class, selectedWork.getUniqueId()));
     }
 
     private void assignToStudent() {
@@ -135,7 +176,7 @@ public class WorksListView extends VerticalLayout {
             Notification.show("Выберите работу для удаления");
             return;
         }
-        selected.forEach(ControlWorkService::removeControlWork);
+        selected.forEach(e->controlWorkService.removeControlWork(e));
         grid.getDataProvider().refreshAll();
         Notification.show("Удалено работ: " + selected.size());
     }
@@ -147,12 +188,6 @@ public class WorksListView extends VerticalLayout {
             return;
         }
         Notification.show("Статистика по работе '" + selected.get(0).getName() + "'");
-    }
-
-    private void openWorkDetails(ControlWorkDTO work) {
-        Notification.show("Открытие деталей работы: " + work.getName());
-        // Здесь логика открытия вкладки с вопросами
-        // getUI().ifPresent(ui -> ui.navigate("work-details/" + work.getUniqueId()));
     }
 
     // Метод для обновления данных в гриде
@@ -182,8 +217,8 @@ public class WorksListView extends VerticalLayout {
 
         // Основной layout
         setSizeFull();
-        setPadding(true);
-        setSpacing(false);
+        setPadding(true); // Даем отступы от краев браузера
+        setSpacing(true);
 
         add(header, buttonsLayout, gridContainer);
         setFlexGrow(1, gridContainer); // Грид занимает все доступное пространство

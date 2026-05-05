@@ -1,38 +1,58 @@
---
--- -- Таблица пользователей (преподаватели и студенты)
--- CREATE TABLE users (
---     user_id SERIAL PRIMARY KEY,
---     login VARCHAR(50) UNIQUE NOT NULL,
---     password_hash VARCHAR(255) NOT NULL,
---     last_name VARCHAR(100) NOT NULL,
---     first_name VARCHAR(100) NOT NULL,
---     middle_name VARCHAR(100),
---     user_type VARCHAR(20) NOT NULL CHECK (user_type IN ('teacher', 'student')),
---     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
--- );
---
--- -- Таблица групп
--- CREATE TABLE groups (
---     group_id SERIAL PRIMARY KEY,
---     group_name VARCHAR(100) NOT NULL,
---     description TEXT,
---     teacher_id INTEGER NOT NULL,
---     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     FOREIGN KEY (teacher_id) REFERENCES users(user_id) ON DELETE CASCADE
--- );
---
--- -- Таблица участников групп (связь многие-ко-многим)
--- CREATE TABLE group_members (
---     group_member_id SERIAL PRIMARY KEY,
---     group_id INTEGER NOT NULL,
---     student_id INTEGER NOT NULL,
---     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---     FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
---     FOREIGN KEY (student_id) REFERENCES users(user_id) ON DELETE CASCADE,
---     UNIQUE (group_id, student_id)
--- );
---
+-- Таблица для контрольных работ
+CREATE TABLE control_work (
+                              id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'Внутренний технический ID',
+                              external_id VARCHAR(255) NOT NULL UNIQUE COMMENT 'Уникальный ID, заполняемый извне',
+                              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата создания записи'
+);
+
+-- Таблица для вопросов и ответов
+CREATE TABLE question_answer (
+                                 id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'Внутренний технический ID вопроса-ответа',
+                                 control_work_id BIGINT NOT NULL COMMENT 'Внешний ключ к контрольной работе',
+                                 question_text TEXT NOT NULL COMMENT 'Текст вопроса',
+                                 answer_text TEXT NOT NULL COMMENT 'Текст ответа',
+                                 question_order INT DEFAULT 0 COMMENT 'Порядок вопроса в контрольной',
+                                 FOREIGN KEY (control_work_id) REFERENCES control_work(id) ON DELETE CASCADE
+);
+
+-- Индекс для быстрого поиска по внешнему ключу
+CREATE INDEX idx_question_answer_control_work_id ON question_answer(control_work_id);
+
+
+-- Таблица пользователей (преподаватели и студенты)
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    login VARCHAR(50) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    middle_name VARCHAR(100),
+    user_type VARCHAR(20) NOT NULL CHECK (user_type IN ('teacher', 'student')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Таблица групп
+CREATE TABLE groups (
+    group_id SERIAL PRIMARY KEY,
+    group_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    teacher_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (teacher_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+-- Таблица участников групп (связь многие-ко-многим)
+CREATE TABLE group_members (
+    group_member_id SERIAL PRIMARY KEY,
+    group_id INTEGER NOT NULL,
+    student_id INTEGER NOT NULL,
+    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE,
+    FOREIGN KEY (student_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    UNIQUE (group_id, student_id)
+);
+
 -- -- Таблица контрольных работ
 -- CREATE TABLE tests (
 --     test_id SERIAL PRIMARY KEY,

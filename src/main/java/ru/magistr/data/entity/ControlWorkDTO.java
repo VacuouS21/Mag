@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ControlWorkDTO {
-    private int id;
+    private Long id;
     private String name;
     private String uniqueId;
     private int questionsCount;

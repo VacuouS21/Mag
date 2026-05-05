@@ -24,7 +24,7 @@ import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import ru.magistr.data.entity.RegistrationRequestDTO;
-import ru.magistr.services.AuthenticationService;
+//import ru.magistr.service.AuthenticationService;
 
 import java.io.InputStream;
 
@@ -32,7 +32,7 @@ import java.io.InputStream;
 @AnonymousAllowed
 public class RegisterView extends VerticalLayout {
 
-    private final AuthenticationService authenticationService;
+//    private final AuthenticationService authenticationService;
     private final Binder<RegistrationRequestDTO> binder;
 
     // Поля формы
@@ -52,8 +52,8 @@ public class RegisterView extends VerticalLayout {
     // Для хранения загруженного аватара
     private byte[] avatarData;
 
-    public RegisterView(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
+    public RegisterView() {
+//        this.authenticationService = authenticationService;
         this.binder = new Binder<>(RegistrationRequestDTO.class);
 
         setAlignItems(Alignment.CENTER);
@@ -194,7 +194,7 @@ public class RegisterView extends VerticalLayout {
         backButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         backButton.setWidth("100%");
 
-        HorizontalLayout buttonsLayout = new HorizontalLayout(registerButton, backButton);
+        VerticalLayout buttonsLayout = new VerticalLayout(registerButton, backButton);
         buttonsLayout.setWidthFull();
         buttonsLayout.setSpacing(true);
 
@@ -292,7 +292,7 @@ public class RegisterView extends VerticalLayout {
             }
 
             // Вызываем сервис для регистрации
-            authenticationService.register(registrationData);
+//            authenticationService.register(registrationData);
 
             Notification.show("Регистрация успешна! Перенаправление на вход...")
                     .addThemeVariants(NotificationVariant.LUMO_SUCCESS);

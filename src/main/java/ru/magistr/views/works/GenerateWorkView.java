@@ -114,7 +114,7 @@ public class GenerateWorkView extends VerticalLayout {
             String uniqueIdValue = uniqueIdField.getValue();
 
             // Создаем новую контрольную работу
-            ControlWorkDTO newWork = new ControlWorkDTO(1, workName, uniqueIdValue, numberOfQuestions);
+            ControlWorkDTO newWork = new ControlWorkDTO(1L, workName, uniqueIdValue, numberOfQuestions);
 
             // Добавляем работу через сервис
             controlWorkService.addControlWork(newWork);

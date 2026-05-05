@@ -5,75 +5,93 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="57fa6a45-74bf-430d-87d4-9d33437069eb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/RegistrationRequestDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/services/AuthenticationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/login/LoginView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/login/RegisterView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/services/ControlWorkService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/data.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/config/TranslationProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/ChatDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/StudentResultDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/service/ChatService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/AssignedWorksListView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/ChatsView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/TakeControlWorkView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/WorkResultsView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/messages.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/messages_ru.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/GroupDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/GroupDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/entity/GroupDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/entity/GroupDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/entity/StudentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/entity/StudentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/ControlWorkDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/ControlWorkDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/QuestionDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/QuestionDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/view/GenerateWorkView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/view/GenerateWorkView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/view/WorkEditView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/view/WorkEditView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/view/WorksListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/view/WorksListView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/LoginView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/StudentGridView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/StudentGridView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/service/ControlWorkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/service/ControlWorkService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/services/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/service/AuthenticationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/AbstractGridView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/ControlWorkQuestionsDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/ControlWorkQuestionsDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/MainView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/login/LoginView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/login/LoginView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/login/RegisterView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/login/RegisterView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/works/GenerateWorkView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/works/GenerateWorkView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/works/WorkEditView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/works/WorksListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/works/WorksListView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/schema.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "VacuouS21"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;VacuouS21&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/VacuouS21/Mag.git",
-    "accountId": "c2ee3850-0b4e-48e0-8e2f-70ef03b87abf"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/VacuouS21/Mag.git&quot;,
+    &quot;accountId&quot;: &quot;c2ee3850-0b4e-48e0-8e2f-70ef03b87abf&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 5
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="3AgPQMSllo94lBm6OH52XCUX7bD" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.Application.executor": "Run",
-    "git-widget-placeholder": "Merging master",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.Application.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;File.Encoding&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="MagVaadin" />
@@ -99,11 +117,29 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773011223016</updated>
-      <workItem from="1773011225592" duration="359000" />
+      <workItem from="1773011225592" duration="8243000" />
+      <workItem from="1774640709334" duration="2805000" />
+      <workItem from="1774727697209" duration="12637000" />
+      <workItem from="1775159949040" duration="2934000" />
+      <workItem from="1775331255885" duration="12974000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/magistr/views/login/LoginView.java</url>
+          <line>74</line>
+          <properties>
+            <option name="lambda-ordinal" value="1" />
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
