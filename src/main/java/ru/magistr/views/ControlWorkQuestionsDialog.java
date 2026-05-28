@@ -2,9 +2,12 @@ package ru.magistr.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
@@ -16,6 +19,7 @@ import org.springframework.context.annotation.Scope;
 import ru.magistr.data.entity.QuestionDto;
 import ru.magistr.service.ControlWorkService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringComponent
@@ -26,18 +30,21 @@ public class ControlWorkQuestionsDialog extends Dialog {
     private VerticalLayout questionsListLayout;
     private int questionCounter = 0;
 
-    // Теперь Spring САМ подставит сервис сюда при создании бина
+    private final List<TextArea> questionInputs = new ArrayList<>();
+    private final List<TextArea> answerInputs = new ArrayList<>();
+
     public ControlWorkQuestionsDialog(ControlWorkService controlWorkService) {
         this.controlWorkService = controlWorkService;
     }
 
-    // Метод для передачи динамических параметров и отрисовки
     public void openDialog(String controlWorkId, boolean isReadOnly) {
-        // Очищаем диалог на случай, если он переиспользуется (хотя prototype должен создавать новый)
         removeAll();
         getHeader().removeAll();
         getFooter().removeAll();
         questionCounter = 0;
+
+        questionInputs.clear();
+        answerInputs.clear();
 
         setWidth("900px");
         setMaxHeight("85vh");
@@ -50,7 +57,6 @@ public class ControlWorkQuestionsDialog extends Dialog {
         questionsListLayout.setPadding(false);
         questionsListLayout.setSpacing(true);
 
-        // Используем внедренный сервис!
         List<QuestionDto> questions = controlWorkService.getQuestionsByWorkId(controlWorkId);
 
         for (QuestionDto q : questions) {
@@ -62,14 +68,12 @@ public class ControlWorkQuestionsDialog extends Dialog {
         scroller.setSizeFull();
         add(scroller);
 
-        // Настройка кнопок футера (зависит от isReadOnly)
-        setupFooter(isReadOnly, scroller);
+        setupFooter(isReadOnly, scroller, controlWorkId);
 
-        // Открываем диалог
         open();
     }
 
-    private void setupFooter(boolean isReadOnly, Scroller scroller) {
+    private void setupFooter(boolean isReadOnly, Scroller scroller, String controlWorkId) {
         Button closeButton = new Button("Закрыть", e -> close());
 
         if (isReadOnly) {
@@ -81,14 +85,34 @@ public class ControlWorkQuestionsDialog extends Dialog {
                 scroller.getElement().executeJs("this.scrollTop = this.scrollHeight;");
             });
 
-            Button saveButton = new Button("Сохранить", e -> close()); // Заглушка сохранения
+            Button saveButton = new Button("Сохранить", e -> {
+                List<QuestionDto> updatedQuestions = new ArrayList<>();
+
+                for (int i = 0; i < questionInputs.size(); i++) {
+                    String qText = questionInputs.get(i).getValue();
+                    String aText = answerInputs.get(i).getValue();
+
+                    if ((qText != null && !qText.isBlank()) || (aText != null && !aText.isBlank())) {
+                        updatedQuestions.add(new QuestionDto(i + 1, qText, aText));
+                    }
+                }
+
+                try {
+                    controlWorkService.updateControlWorkQuestions(controlWorkId, updatedQuestions);
+                    Notification.show("Изменения успешно сохранены!", 3000, Notification.Position.BOTTOM_START);
+                    close();
+                } catch (Exception ex) {
+                    Notification.show("Ошибка при сохранении: " + ex.getMessage(), 5000, Notification.Position.MIDDLE);
+                    ex.printStackTrace();
+                }
+            });
+            saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
             HorizontalLayout rightFooterButtons = new HorizontalLayout(closeButton, saveButton);
             getFooter().add(addQuestionButton, rightFooterButtons);
         }
     }
 
-    // --- МЕТОД ОТРИСОВКИ КАРТОЧКИ ---
     private HorizontalLayout createQuestionCard(int number, String questionText, String existingAnswer, boolean isReadOnly) {
         HorizontalLayout card = new HorizontalLayout();
         card.setWidthFull();
@@ -100,7 +124,6 @@ public class ControlWorkQuestionsDialog extends Dialog {
         );
         card.getStyle().set("border", "1px solid var(--lumo-contrast-10pct)");
 
-        // Кружок с номером
         Span numberBadge = new Span(String.valueOf(number));
         numberBadge.setWidth("36px");
         numberBadge.setHeight("36px");
@@ -112,36 +135,84 @@ public class ControlWorkQuestionsDialog extends Dialog {
         numberBadge.getStyle().set("border-radius", "50%");
         numberBadge.getStyle().set("flex-shrink", "0");
 
-        // ПОЛЕ ВОПРОСА
         Component questionComponent;
+        TextArea questionArea = null; // Выделяем переменную, чтобы передать в удаление
         if (isReadOnly) {
-            // В режиме просмотра оставляем красивый текст
             questionComponent = new Span(questionText);
             ((Span) questionComponent).setWidthFull();
             questionComponent.addClassNames(LumoUtility.FontSize.MEDIUM, LumoUtility.Padding.Top.XSMALL);
         } else {
-            // В режиме редактирования превращаем в многострочное поле
-            TextArea questionArea = new TextArea();
+            questionArea = new TextArea();
             questionArea.setValue(questionText != null ? questionText : "");
             questionArea.setPlaceholder("Введите текст вопроса...");
             questionArea.setWidthFull();
             questionComponent = questionArea;
+
+            questionInputs.add(questionArea);
         }
 
-        // ПОЛЕ ОТВЕТА
         TextArea answerField = new TextArea();
         answerField.setWidth("300px");
         answerField.setPlaceholder(isReadOnly ? "Ответ отсутствует" : "Введите ответ...");
         answerField.getStyle().set("flex-shrink", "0");
-        answerField.setReadOnly(isReadOnly); // Блокируем, если режим просмотра
+        answerField.setReadOnly(isReadOnly);
 
         if (existingAnswer != null && !existingAnswer.isEmpty()) {
             answerField.setValue(existingAnswer);
         }
 
-        card.add(numberBadge, questionComponent, answerField);
+        if (!isReadOnly) {
+            answerInputs.add(answerField);
+
+            // ДОБАВЛЯЕМ КНОПКУ УДАЛЕНИЯ ВОПРОСА
+            Button deleteBtn = new Button(VaadinIcon.TRASH.create());
+            deleteBtn.addThemeVariants(ButtonVariant.LUMO_ICON, ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
+            deleteBtn.getStyle().set("flex-shrink", "0");
+
+            // Копируем ссылки для использования внутри лямбда-выражения
+            TextArea finalQuestionArea = questionArea;
+            TextArea finalAnswerField = answerField;
+
+            deleteBtn.addClickListener(e -> {
+                // 1. Убираем карточку с экрана
+                questionsListLayout.remove(card);
+                // 2. Убираем поля из списков для сохранения
+                questionInputs.remove(finalQuestionArea);
+                answerInputs.remove(finalAnswerField);
+                // 3. Пересчитываем нумерацию
+                updateQuestionNumbers();
+            });
+
+            // Добавляем элементы в карточку вместе с кнопкой удаления
+            card.add(numberBadge, questionComponent, answerField, deleteBtn);
+        } else {
+            // В режиме просмотра кнопку не добавляем
+            card.add(numberBadge, questionComponent, answerField);
+        }
+
         card.setFlexGrow(1, questionComponent);
 
         return card;
+    }
+
+    /**
+     * Метод-помощник для пересчета порядковых номеров карточек после удаления.
+     */
+    private void updateQuestionNumbers() {
+        int index = 1;
+        // Проходимся по всем оставшимся карточкам в контейнере
+        for (Component child : questionsListLayout.getChildren().toList()) {
+            if (child instanceof HorizontalLayout) {
+                HorizontalLayout card = (HorizontalLayout) child;
+                // Кружок с номером — это первый добавленный компонент
+                Component badge = card.getComponentAt(0);
+                if (badge instanceof Span) {
+                    ((Span) badge).setText(String.valueOf(index));
+                }
+                index++;
+            }
+        }
+        // Обновляем глобальный счетчик, чтобы новый добавленный вопрос имел правильный номер
+        questionCounter = index - 1;
     }
 }

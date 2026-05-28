@@ -3,6 +3,7 @@ package ru.magistr.views.works;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
@@ -89,9 +90,6 @@ public class WorksListView extends VerticalLayout {
                 .setAutoWidth(true)
                 .setResizable(true);
 
-        // Устанавливаем данные из сервиса
-        grid.setItems(controlWorkService.getControlWorks());
-
         // Обработка двойного клика
         grid.addItemDoubleClickListener(event -> {
             ControlWorkDTO work = event.getItem();
@@ -112,6 +110,9 @@ public class WorksListView extends VerticalLayout {
 
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setSizeFull();
+
+        // Загружаем данные из БД при инициализации
+        refreshGridData();
     }
 
     private void initActionsButton() {
@@ -126,18 +127,24 @@ public class WorksListView extends VerticalLayout {
         contextMenu.addItem("Редактировать работу", e -> {editControlWork();});
         contextMenu.addItem("Просмотреть результаты", e -> viewResults());
     }
-    private void editControlWork(){
+
+    private void editControlWork() {
         Set<ControlWorkDTO> selectedItems = grid.getSelectedItems();
+
         if (selectedItems.isEmpty()) {
-            Notification.show("Пожалуйста, выделите контрольную работу галочкой", 3000, Notification.Position.MIDDLE);
+            Notification.show("Пожалуйста, выделите контрольную работу галочкой для редактирования", 3000, Notification.Position.MIDDLE);
+            return;
+        }
+        if (selectedItems.size() > 1) {
+            Notification.show("Для редактирования выберите только одну работу", 3000, Notification.Position.MIDDLE);
             return;
         }
 
         ControlWorkDTO selectedWork = selectedItems.iterator().next();
 
-        // Просим у Spring НОВЫЙ экземпляр диалога со всеми внедренными сервисами
+        // Просим у Spring новый экземпляр диалога со всеми внедренными сервисами
         ControlWorkQuestionsDialog dialog = dialogProvider.getObject();
-        // Передаем данные и открываем
+        // Передаем уникальный ID и открываем в режиме редактирования (readOnly = false)
         dialog.openDialog(selectedWork.getUniqueId(), false);
     }
 
@@ -171,16 +178,39 @@ public class WorksListView extends VerticalLayout {
     }
 
     private void deleteWork() {
-        List<ControlWorkDTO> selected = grid.getSelectedItems().stream().toList();
-        if (selected.isEmpty()) {
-            Notification.show("Выберите работу для удаления");
+        Set<ControlWorkDTO> selectedItems = grid.getSelectedItems();
+        if (selectedItems.isEmpty()) {
+            Notification.show("Выберите контрольную работу для удаления", 3000, Notification.Position.MIDDLE);
             return;
         }
-        selected.forEach(e->controlWorkService.removeControlWork(e));
-        grid.getDataProvider().refreshAll();
-        Notification.show("Удалено работ: " + selected.size());
-    }
 
+        // Создаем окно подтверждения удаления
+        Dialog confirmDialog = new Dialog();
+        confirmDialog.setHeaderTitle("Подтверждение удаления");
+
+        String text = selectedItems.size() == 1
+                ? "Вы уверены, что хотите удалить работу «" + selectedItems.iterator().next().getName() + "»?"
+                : "Вы уверены, что хотите удалить выбранные работы (" + selectedItems.size() + " шт.)?";
+        confirmDialog.add(text);
+
+        Button confirmButton = new Button("Удалить", event -> {
+            // Удаляем каждую выбранную работу через сервис
+            selectedItems.forEach(e -> controlWorkService.removeControlWork(e));
+
+            // Обновляем грид свежими данными из БД
+            refreshGridData();
+            grid.deselectAll(); // Снимаем выделение
+
+            Notification.show("Успешно удалено", 3000, Notification.Position.BOTTOM_START);
+            confirmDialog.close();
+        });
+        confirmButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
+
+        Button cancelButton = new Button("Отмена", event -> confirmDialog.close());
+
+        confirmDialog.getFooter().add(cancelButton, confirmButton);
+        confirmDialog.open();
+    }
     private void showStatistics() {
         List<ControlWorkDTO> selected = grid.getSelectedItems().stream().toList();
         if (selected.isEmpty()) {
@@ -190,9 +220,16 @@ public class WorksListView extends VerticalLayout {
         Notification.show("Статистика по работе '" + selected.get(0).getName() + "'");
     }
 
-    // Метод для обновления данных в гриде
+    // Универсальный метод для обновления данных в гриде из БД
+    public void refreshGridData() {
+        // Получаем актуальный список из базы данных
+        List<ControlWorkDTO> worksFromDb = controlWorkService.getControlWorks();
+        grid.setItems(worksFromDb);
+    }
+
+    // Старый метод оставим для совместимости (если он вызывается из других мест)
     public void refreshGrid() {
-        grid.getDataProvider().refreshAll();
+        refreshGridData();
     }
 
     private void addComponents() {

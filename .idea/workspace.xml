@@ -4,36 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57fa6a45-74bf-430d-87d4-9d33437069eb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/config/TranslationProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/ChatDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/StudentResultDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/service/ChatService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/AssignedWorksListView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/ChatsView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/TakeControlWorkView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/WorkResultsView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/messages.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/messages_ru.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="57fa6a45-74bf-430d-87d4-9d33437069eb" name="Changes" comment="new ver">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/request/GeneratedQuestionResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/request/GenerationRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/ControlWorkDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/ControlWorkDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/QuestionDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/QuestionDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/ControlWork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/entity/ControlWork.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/data/repository/ControlWorkRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/data/repository/ControlWorkRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/service/ControlWorkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/service/ControlWorkService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/services/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/service/AuthenticationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/AbstractGridView.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/ControlWorkQuestionsDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/ControlWorkQuestionsDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/MainView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/login/LoginView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/login/LoginView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/login/RegisterView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/login/RegisterView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/works/GenerateWorkView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/works/GenerateWorkView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/works/WorkEditView.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/magistr/views/works/WorksListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/magistr/views/works/WorksListView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/data.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/schema.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -122,11 +102,26 @@
       <workItem from="1774727697209" duration="12637000" />
       <workItem from="1775159949040" duration="2934000" />
       <workItem from="1775331255885" duration="12974000" />
+      <workItem from="1777983905697" duration="2604000" />
+      <workItem from="1779992545088" duration="6180000" />
     </task>
+    <task id="LOCAL-00001" summary="new ver">
+      <option name="closed" value="true" />
+      <created>1777983935274</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1777983935274</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="new ver" />
+    <option name="LAST_COMMIT_MESSAGE" value="new ver" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

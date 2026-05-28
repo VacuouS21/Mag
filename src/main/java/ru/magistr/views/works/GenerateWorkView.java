@@ -94,38 +94,43 @@ public class GenerateWorkView extends VerticalLayout {
 
         // Кнопка "Сгенерировать"
         generateButton = new Button("Сгенерировать вопросы", event -> {
-            // Проверка заполненности полей
+            // 1. Проверяем, что обязательные поля заполнены в UI
             if (workNameField.isEmpty()) {
                 Notification.show("Введите наименование контрольной работы");
                 return;
             }
-
-            String text = textArea.getValue();
-            boolean isFileUploaded = buffer.getFileName() != null && !buffer.getFileName().isEmpty();
-
-            // Проверка: если оба поля пустые
-            if ((text == null || text.trim().isEmpty()) && !isFileUploaded) {
-                Notification.show("Необходимо ввести текст или загрузить файл для генерации");
+            if (uniqueIdField.isEmpty()) {
+                Notification.show("Уникальный ID контрольной работы не сгенерирован");
                 return;
             }
 
+            String text = textArea.getValue();
+            if (text == null || text.trim().isEmpty()) {
+                Notification.show("Необходимо ввести текст для генерации вопросов");
+                return;
+            }
+
+            // Извлекаем значения из компонентов интерфейса
             int numberOfQuestions = numberOfQuestionsField.getValue().intValue();
             String workName = workNameField.getValue();
             String uniqueIdValue = uniqueIdField.getValue();
 
-            // Создаем новую контрольную работу
-            ControlWorkDTO newWork = new ControlWorkDTO(1L, workName, uniqueIdValue, numberOfQuestions);
+            try {
+                // 2. Запускаем процесс: Сохранение шапки -> Запрос к API -> Дозапись вопросов в БД
+                controlWorkService.generateAndSaveWork(workName, uniqueIdValue, text, numberOfQuestions);
 
-            // Добавляем работу через сервис
-            controlWorkService.addControlWork(newWork);
+                // 3. Если всё прошло успешно, уведомляем пользователя
+                Notification.show("Контрольная работа '" + workName + "' успешно создана, вопросы сохранены в базу.");
 
-            // Логика генерации вопросов
-            Notification.show("Генерация вопросов для работы: " + workName +
-                    " (ID: " + uniqueIdValue + "), " +
-                    "количество вопросов: " + numberOfQuestions);
+                // Возвращаем пользователя на страницу со списком документов/работ
+                getUI().ifPresent(ui -> ui.navigate("documents"));
 
-            // Возвращаемся на страницу со списком работ
-            getUI().ifPresent(ui -> ui.navigate("documents"));
+            } catch (Exception e) {
+                // В случае падения API или БД выводим ошибку на экран
+                Notification.show("Ошибка при обработке: " + e.getMessage(),
+                        5000, Notification.Position.MIDDLE);
+                e.printStackTrace();
+            }
         });
 
         // Обработчик изменения способа ввода

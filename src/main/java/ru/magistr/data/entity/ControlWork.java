@@ -26,6 +26,9 @@ public class ControlWork {
     @Column(name = "external_id", nullable = false, unique = true)
     private String externalId; // ID, который приходит из внешней системы
 
+    @Column(name = "name")
+    private String name;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
